@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw
+    database: GITHUB_ANALYTICS
+    schema: RAW
+    tables:
+      - name: raw_repos
+      - name: raw_commits
+      - name: raw_pull_requests
+      - name: raw_issues
+      - name: raw_contributors

@@ -23,6 +23,17 @@ renamed AS (
         CHANGED_FILES               AS files_changed,
         INGESTED_AT                 AS ingested_at
     FROM source
+),
+
+deduped AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY pr_id
+            ORDER BY ingested_at DESC
+        ) AS row_num
+    FROM renamed
 )
 
-SELECT * FROM renamed
+SELECT * EXCLUDE (row_num)
+FROM deduped
+WHERE row_num = 1

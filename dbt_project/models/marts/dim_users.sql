@@ -1,10 +1,20 @@
 WITH commit_authors AS (
-    SELECT DISTINCT
+    SELECT
         author_login,
         author_name,
-        author_email
+        author_email,
+        ROW_NUMBER() OVER (
+            PARTITION BY author_login
+            ORDER BY committed_at DESC
+        ) AS row_num
     FROM {{ ref('stg_commits') }}
     WHERE author_login IS NOT NULL
+),
+
+deduped_authors AS (
+    SELECT * EXCLUDE (row_num)
+    FROM commit_authors
+    WHERE row_num = 1
 ),
 
 commit_counts AS (
@@ -27,6 +37,6 @@ SELECT
     c.repos_contributed_to,
     c.first_commit_at,
     c.latest_commit_at
-FROM commit_authors a
+FROM deduped_authors a
 LEFT JOIN commit_counts c
     ON a.author_login = c.author_login

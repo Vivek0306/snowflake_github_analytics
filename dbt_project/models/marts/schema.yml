@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: dim_repos
+    description: "One row per tracked repository with contributor counts"
+    columns:
+      - name: repo_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_full_name
+        tests:
+          - not_null
+          - unique
+      - name: primary_language
+        tests:
+          - not_null
+
+  - name: dim_users
+    description: "One row per unique GitHub user who has made at least one commit"
+    columns:
+      - name: user_login
+        tests:
+          - not_null
+          - unique
+      - name: total_commits
+        tests:
+          - not_null
+
+  - name: fct_commits
+    description: "One row per commit across all tracked repos"
+    columns:
+      - name: commit_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_repos')
+              field: repo_id
+      - name: committed_at
+        tests:
+          - not_null
+
+  - name: fct_pull_requests
+    description: "One row per pull request with derived merge metrics"
+    columns:
+      - name: pr_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_repos')
+              field: repo_id
+      - name: pr_size
+        tests:
+          - accepted_values:
+              values: ['small', 'medium', 'large']
+
+  - name: fct_issues
+    description: "One row per issue with derived resolution metrics"
+    columns:
+      - name: issue_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_repos')
+              field: repo_id
+      - name: discussion_level
+        tests:
+          - accepted_values:
+              values: ['no discussion', 'light discussion', 'heavy discussion']

@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: stg_repos
+    description: "Cleaned repo metadata from the GitHub API"
+    columns:
+      - name: repo_id
+        description: "Unique GitHub repo identifier"
+        tests:
+          - not_null
+          - unique
+      - name: repo_full_name
+        tests:
+          - not_null
+          - unique
+      - name: primary_language
+        tests:
+          - not_null
+
+  - name: stg_commits
+    description: "Cleaned commit data from the GitHub API"
+    columns:
+      - name: commit_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_id
+        tests:
+          - not_null
+      - name: committed_at
+        tests:
+          - not_null
+
+  - name: stg_pull_requests
+    description: "Cleaned pull request data from the GitHub API"
+    columns:
+      - name: pr_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_id
+        tests:
+          - not_null
+      - name: pr_state
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['open', 'closed']
+
+  - name: stg_issues
+    description: "Cleaned issue data from the GitHub API"
+    columns:
+      - name: issue_id
+        tests:
+          - not_null
+          - unique
+      - name: repo_id
+        tests:
+          - not_null
+      - name: issue_state
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['open', 'closed']
+
+  - name: stg_contributors
+    description: "Cleaned contributor data from the GitHub API"
+    columns:
+      - name: repo_id
+        tests:
+          - not_null
+      - name: contribution_count
+        tests:
+          - not_null

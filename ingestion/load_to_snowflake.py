@@ -18,7 +18,7 @@ SNOWFLAKE_CONN = {
 
 TABLES = [
     {"parquet": "data/raw/repos", "table" : "RAW_REPOS"},
-    {"parquet": "data/raw/commits", "table" : "RAW_commits"},
+    {"parquet": "data/raw/commits", "table" : "RAW_COMMITS"},
     {"parquet": "data/raw/pull_requests", "table" : "RAW_PULL_REQUESTS"},
     {"parquet": "data/raw/issues", "table" : "RAW_ISSUES"},
     {"parquet": "data/raw/contributors", "table" : "RAW_CONTRIBUTORS"},

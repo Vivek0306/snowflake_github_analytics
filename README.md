@@ -177,7 +177,7 @@ github-analytics/
 ├── ingestion/
 │   ├── ingest_repos.py              # fetch repo metadata
 │   ├── ingest_commits.py            # fetch commits
-│   ├── ingest_pull_requests.py      # fetch pull requests
+│   ├── ingest_pulls.py      # fetch pull requests
 │   ├── ingest_issues.py             # fetch issues (PRs filtered out)
 │   ├── ingest_contributors.py       # fetch contributors
 │   └── load_to_snowflake.py         # PUT + COPY INTO loader
@@ -231,11 +231,18 @@ Run in this order — `load_to_snowflake.py` depends on all five Parquet outputs
 ```bash
 python ingestion/ingest_repos.py
 python ingestion/ingest_commits.py
-python ingestion/ingest_pull_requests.py
+python ingestion/ingest_pulls.py
 python ingestion/ingest_issues.py
 python ingestion/ingest_contributors.py
 python ingestion/load_to_snowflake.py
 ```
+or
+
+```bash
+chmod +x run_pipeline.sh
+./run_pipeline.sh
+```
+
 
 **3. Run dbt**
 
